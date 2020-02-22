@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Http\Requests\UsersRequest;
+use App\Http\Requests\UsersEditRequest;
 use Illuminate\Http\Request;
 use App\User;
 use App\Role;
@@ -29,6 +30,7 @@ class UsersController extends Controller
      */
     public function create()
     {
+
         //in list() method the second parameter will be set to value parameter of select.
         //list() returns array.
         $roles = Role::lists('name','id')->all();
@@ -44,8 +46,16 @@ class UsersController extends Controller
     public function store(UsersRequest $request)
     {
         //return $request->all();
+        if(trim($request->password) =='')
+        {
+            $input = $request->except('password');
+        }
+        else
+        {
+            $input = $request->all();
+            $input['password'] =bcrypt($request->password);
+        }
         
-        $input = $request->all();
         $photo =[];
         if($file = $request->file('photo_id'))
         {
@@ -56,9 +66,9 @@ class UsersController extends Controller
         }
 
         $getphoto = Photo::create($photo);
-        
+
         $input['photo_id'] = $getphoto->id;
-        $input['password'] =bcrypt($request->password);
+        
         //print_r($input);
          User::create($input);
          return redirect('/admin/users');
@@ -83,7 +93,9 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        return view('admin.users.edit');
+        $user = User::findOrFail($id);
+        $roles = Role::lists('name','id')->all();
+        return view('admin.users.edit',compact('user','roles'));
     }
 
     /**
@@ -93,9 +105,38 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UsersEditRequest $request, $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        if(trim($request->password) =='')
+        {
+            $input = $request->except('password');
+        }
+        else
+        {
+            $input = $request->all();
+            $input['password'] =bcrypt($request->password);
+        }
+        
+        $input = $request->all();
+        $photo =[];
+        if($file = $request->file('photo_id'))
+        {
+            $photo['file'] = time().$file->getClientOriginalName();
+            $photo['size'] = $file->getSize();
+
+            $file->move('images',$photo['file']);
+
+            $getphoto = Photo::create($photo);
+            $input['photo_id'] = $getphoto->id;
+        }        
+
+        
+        $input['password'] =bcrypt($request->password);
+        //print_r($input);
+         $user->update($input);
+         return redirect('/admin/users');
     }
 
     /**
