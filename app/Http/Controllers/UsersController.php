@@ -5,6 +5,7 @@ use App\Http\Requests\UsersRequest;
 use Illuminate\Http\Request;
 use App\User;
 use App\Role;
+use App\Photo;
 use App\Http\Requests;
 
 
@@ -42,8 +43,25 @@ class UsersController extends Controller
      */
     public function store(UsersRequest $request)
     {
-        User::create($request->all());
-        return redirect('/admin.users');
+        //return $request->all();
+        
+        $input = $request->all();
+        $photo =[];
+        if($file = $request->file('photo_id'))
+        {
+            $photo['file'] = time().$file->getClientOriginalName();
+            $photo['size'] = $file->getSize();
+
+            $file->move('images',$photo['file']);
+        }
+
+        $getphoto = Photo::create($photo);
+        
+        $input['photo_id'] = $getphoto->id;
+        $input['password'] =bcrypt($request->password);
+        //print_r($input);
+         User::create($input);
+         return redirect('/admin/users');
     }
 
     /**
