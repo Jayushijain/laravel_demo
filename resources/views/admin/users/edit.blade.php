@@ -49,9 +49,18 @@
 	</div>
 
 	<div class="form-group">
-		{!! Form::submit('Submit',['class'=>'btn btn-primary']) !!}
+		{!! Form::submit('Update',['class'=>'btn btn-primary']) !!}
 		
 	</div>
+{!! Form::close() !!}
+
+{!! Form::open(['method'=>'DELETE','action'=>['UsersController@destroy',$user->id]]) !!}
+{{ csrf_field() }}
+	<div class="form-group">
+		{!! Form::submit('Delete',['class'=>'btn btn-danger']) !!}
+		
+	</div>
+
 {!! Form::close() !!}
 
 

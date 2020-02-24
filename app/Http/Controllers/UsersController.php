@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use Illuminate\Support\Facades\Session;
 use App\Http\Requests\UsersRequest;
 use App\Http\Requests\UsersEditRequest;
 use Illuminate\Http\Request;
@@ -53,7 +55,7 @@ class UsersController extends Controller
         else
         {
             $input = $request->all();
-            $input['password'] =bcrypt($request->password);
+            //$input['password'] =bcrypt($request->password);
         }
         
         $photo =[];
@@ -147,6 +149,12 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::findOrFail($id);
+        //this method will delte photo from public/image folder.
+        unlink(public_path().$user->photo->file);
+        $user->delete();
+
+        Session::flash('msg','User has been deleted successfully');
+        return redirect('/admin/users');
     }
 }
