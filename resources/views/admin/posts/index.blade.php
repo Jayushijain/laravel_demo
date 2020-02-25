@@ -2,6 +2,19 @@
 
 @section('content')
 
+@if (Session::has('msg'))
+	<div class="alert alert-success alert-block fade in" id="alert" style="display:block;">
+	<button data-dismiss="alert" class="close close-sm" type="button">
+		<i class="fa fa-times"></i>
+	</button>
+	<h4>
+		<i class="icon-ok-sign"></i>
+		Success!
+	</h4>
+	<p>{{ session('msg') }}</p>
+</div>
+@endif
+
 <h1><b>Posts</b></h1>
 <table class="table">
 	<tr>
@@ -25,10 +38,10 @@
 				<td>{{ $post->user->name }}</td>
 				<td>{{ $post->category ? $post->category->name : 'No category'}}</td>
 				<td>{{ ucwords($post->title) }}</td>
-				<td>{{ ucwords($post->body) }}</td>
+				<td>{{ str_limit(ucwords($post->body),3) }}</td>
 				<td>{{ $post->created_at->diffForHumans() }}</td>
 				<td>{{ $post->updated_at->diffForHumans() }}</td>
-				<td><a href="">Edit</a></td>
+				<td><a href="{{ route('admin.posts.edit',$post->id) }}">Edit</a></td>
 			</tr>
 
 		@endforeach
