@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use App\Comment;
+use App\CommentReply;
 use App\Photo;
 use App\Category;
 use App\User;
@@ -132,5 +134,13 @@ class PostsController extends Controller
         $post->delete();
         Session::flash('msg','Post deleted successfully');
         return redirect('/admin/posts');
+    }
+
+    public function post($id)
+    {
+        $post =Post::findOrFail($id);
+        $comments = $post->comments()->whereIsActive(1)->get();
+        //$comment_replies = $comments->replies()->whereIsActive(1)->get();
+        return view('post',compact('post','comments'));
     }
 }

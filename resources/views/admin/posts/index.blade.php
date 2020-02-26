@@ -41,7 +41,10 @@
 				<td>{{ str_limit(ucwords($post->body),3) }}</td>
 				<td>{{ $post->created_at->diffForHumans() }}</td>
 				<td>{{ $post->updated_at->diffForHumans() }}</td>
+				<td><a href="{{ route('admin.comments.show',$post->id,) }}">View Comments</a></td>
+				<td><a href="{{ route('home.post',$post->id,) }}">View Post</a></td>
 				<td><a href="{{ route('admin.posts.edit',$post->id) }}">Edit</a></td>
+
 			</tr>
 
 		@endforeach
