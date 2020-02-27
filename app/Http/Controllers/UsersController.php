@@ -35,7 +35,7 @@ class UsersController extends Controller
 
         //in list() method the second parameter will be set to value parameter of select.
         //list() returns array.
-        $roles = Role::lists('name','id')->all();
+        $roles = Role::pluck('name','id')->all();
         return view('admin.users.create',compact('roles'));
     }
 
@@ -55,7 +55,7 @@ class UsersController extends Controller
         else
         {
             $input = $request->all();
-            //$input['password'] =bcrypt($request->password);
+            $input['password'] =bcrypt($request->password);
         }
         
         $photo =[];
@@ -96,7 +96,7 @@ class UsersController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        $roles = Role::lists('name','id')->all();
+        $roles = Role::pluck('name','id')->all();
         return view('admin.users.edit',compact('user','roles'));
     }
 
@@ -134,8 +134,6 @@ class UsersController extends Controller
             $input['photo_id'] = $getphoto->id;
         }        
 
-        
-        $input['password'] =bcrypt($request->password);
         //print_r($input);
          $user->update($input);
          return redirect('/admin/users');
