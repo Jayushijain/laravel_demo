@@ -57,4 +57,34 @@ class MediasController extends Controller
         Session::flash('msg','Photo has been deleted successfully');
         return redirect('/admin/medias');
     }
+
+     public function deleteMedia(Request $request)
+     {
+        //return $request->checkarray;
+        
+        if(!empty($request->checkarray))
+        {
+            $photos = Photo::findOrFail($request->checkarray);
+
+            foreach ($photos as $photo) 
+            {
+                $photo->delete();
+                
+            }
+
+            Session::flash('msg','Photos has been deleted successfully');
+             return redirect()->back();
+            
+        }
+        else
+        {
+            
+             Session::flash('msg','Please select items to delete');
+              return redirect()->back();
+        }
+       
+        
+        //return "works";
+
+     }
 }

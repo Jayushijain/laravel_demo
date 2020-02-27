@@ -2,10 +2,13 @@
 
 @section('content')
 
+@include('includes.tinyeditor')
+
 <h1><b>Create Posts</b></h1>
 
 {!! Form::open(['method'=>'post','action'=>'PostsController@store','files'=>true]) !!}
 {{ csrf_field() }}
+{{ method_field('delete') }}
 
 	<div class="form-group {{ $errors->has('name') ? 'has-error' : '' }}">
 		{!! Form::label('title','Title:') !!}
