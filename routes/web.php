@@ -11,13 +11,10 @@
 |
  */
 
-Route::get('/', function ()
-{
-	return view('welcome');
-});
+Route::get('/', 'HomeController@index');
 
 //To open post
-Route::get('/post/{id}', ['as' => 'home.post', 'uses' => 'PostsController@post']);
+Route::get('/post/{id}', ['as' => 'home.post', 'uses' => 'HomeController@post']);
 
 //For all authentication functions.
 Auth::routes();
@@ -27,10 +24,7 @@ Route::get('/logout', 'Auth\LoginController@logout');
 
 Route::group(['middleware' => 'admin'], function ()
 {
-	Route::get('/admin', function ()
-	{
-		return view('admin.index');
-	});
+	Route::get('/admin', 'AdminController@index');
 
 	Route::resource('/admin/users', 'UsersController', ['names' => [
 		'index'  => 'admin.users.index',

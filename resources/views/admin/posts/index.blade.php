@@ -19,11 +19,10 @@
 <table class="table">
 	<tr>
 		<th>Id</th>		
-		<th>Photo</th>		
+		<th>Photo</th>
+		<th>Title</th>		
 		<th>User</th>
-		<th>Category</th>
-		<th>Title</th>
-		<th>Body</th>
+		<th>Category</th>		
 		<th>Created</th>
 		<th>Updated</th>
 		<th>Actions</th>
@@ -35,10 +34,9 @@
 			<tr>
 				<td>{{ $post->id}}</td>
 				<td><img height = "50" width = "50" src="{{ $post->photo ? $post->photo->file : 'http://placehold.it/400x400' }}" alt=""></td>
-				<td>{{ $post->user->name }}</td>
-				<td>{{ $post->category ? $post->category->name : 'No category'}}</td>
 				<td>{{ ucwords($post->title) }}</td>
-				<td>{{ str_limit(ucwords($post->body),3) }}</td>
+				<td>{{ $post->user->name }}</td>
+				<td>{{ $post->category ? $post->category->name : 'No category'}}</td>			
 				<td>{{ $post->created_at->diffForHumans() }}</td>
 				<td>{{ $post->updated_at->diffForHumans() }}</td>
 				<td><a href="{{ route('admin.comments.show',$post->id,) }}">View Comments</a></td>
